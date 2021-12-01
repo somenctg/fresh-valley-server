@@ -20,10 +20,25 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-  console.log('connection err', err);
-  const productCollection = client.db("freshValley").collection("products");
-  console.log('database connected successfully')
-  // perform actions on the collection object
-  // client.close();
+  // console.log('connection err', err);
+  const productsCollection = client.db("freshValley").collection("products");
+  app.get('/products',(req,res)=>{
+    productsCollection.find()
+    .toArray((err,items)=>{
+      res.send(items);
+    })
+  })
+
+  app.post('/addProducts',(req,res)=>{
+    const newProduct = req.body;
+    console.log('adding new product: ', newProduct)
+    productsCollection.insertOne(newProduct)
+    .then(result=>{
+    
+      console.log('inserted count', result.insertedCount)
+      res.send(result.insertedCount > 0);
+    })
+  })
+  
 });
 
