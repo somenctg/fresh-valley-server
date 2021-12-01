@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const ObjectId = require('mongodb').ObjectId
 const { MongoClient } = require('mongodb');
 const cors = require('cors')
 app.use(express.urlencoded({ extended: true }));
@@ -9,9 +10,7 @@ const port = process.env.PORT || 5055
 app.use(cors());
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
@@ -46,6 +45,13 @@ client.connect(err => {
     productsCollection.findOneAndDelete({_id: id})
     .then(documents => res.send(!!documents.value))
 })
+
   
 });
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(process.env.PORT || port)
+
 
