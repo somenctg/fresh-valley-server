@@ -40,5 +40,12 @@ client.connect(err => {
     })
   })
   
+  app.delete('deleteProduct/:id', (req, res) =>{
+    const id = ObjectId(req.params.id);
+    console.log('delete this', id);
+    productsCollection.findOneAndDelete({_id: id})
+    .then(documents => res.send(!!documents.value))
+})
+  
 });
 
